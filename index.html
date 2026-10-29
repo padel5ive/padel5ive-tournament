@@ -1498,6 +1498,16 @@ function scoreReset(action){
         details.addEventListener('toggle',()=>{if(details.isConnected)openState.ops=details.open});
       }
     }
+    // Registration/Setup must use the SAME lower Competition Operations menu.
+    // Never render a second menu in the global action dock.
+    if(s.stage==='setup'){
+      const target=section.querySelector('.compact-controls .ops-actions');
+      if(target&&!target.querySelector('.setup-management-group')){
+        const group=document.createElement('div');group.className='tools-more-group setup-management-group';
+        group.innerHTML='<div class="tools-more-heading">PLAYERS & DATA</div><div class="tools-more-grid"><button type="button" onclick="exportJSON()">↓ Backup Data</button><button type="button" onclick="document.getElementById(\'importData\').click()">↑ Restore Backup</button><button type="button" onclick="openNameEditor()">✎ Edit Player Names</button></div><div class="tools-more-heading" style="margin-top:15px">TOURNAMENT MANAGEMENT</div><div class="tools-more-grid"><button type="button" class="menu-new-tournament" onclick="newSession()">New Tournament</button></div>';
+        target.appendChild(group);
+      }
+    }
     // Consolidate Stage 1 moderator commands into the single Tools & More drawer.
     if(s.stage==='americano'){
       const quick=section.querySelector('.quick-moderator');
@@ -1958,4 +1968,17 @@ function scoreReset(action){
  }
 })();
 </script>
+<style id="padel5ive-one-single-bottom-menu">
+/* Always one lower Competition Operations disclosure. Setup global controls are redundant. */
+body.is-tournament-setup #main-action-dock{display:none!important}
+body:not(.is-tournament-setup) #setup-utility-details{display:none!important}
+#setup .ops-bar{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;border:1px solid #46515b;border-radius:13px;background:linear-gradient(130deg,#22303a,#1b2630);padding:0!important;margin:10px 0 16px}
+#setup .ops-bar>.over{display:none}
+#setup .ops-bar>.compact-controls{width:100%;margin:0}
+#setup .compact-controls>summary{display:flex;align-items:center;justify-content:space-between;border:0;border-radius:12px;padding:13px 16px;background:transparent;color:#eadfce;min-height:45px;font-size:12px;font-weight:650}
+#setup .compact-controls .ops-actions{padding:12px;display:flex;flex-direction:column;gap:9px}
+#setup .setup-management-group{width:100%}
+#setup .setup-management-group .tools-more-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(max-width:650px){#setup .setup-management-group .tools-more-grid{grid-template-columns:1fr}}
+</style>
 </body></html>
